@@ -7,7 +7,7 @@
 {
   imports =
     [ # Include the results of the hardware scan.
-      /etc/nixos/hardware-configuration.nix
+      ./hardware-configuration.nix
       # home-manager.nixosModules.default
     ];
 
@@ -132,6 +132,7 @@
     tealdeer
     xclip
     bat
+    neofetch
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
