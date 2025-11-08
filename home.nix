@@ -52,6 +52,14 @@ in
     # '';
   };
 
+  programs.vivaldi.enable = true;
+  home.sessionVariables = {
+    # this is for vivaldi to launch correctly
+    CHROMIUM_FLAGS = "--ozone-platform=wayland --enable-features=UseOzonePlatform,WaylandWindowDecorations";
+  };
+
+
+
   home.packages = with pkgs; [
     neofetch
 
