@@ -1,4 +1,5 @@
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
+
 let
   dotfiles = "${config.home.homeDirectory}/nixos-version-control/config";
   create_symlink = path: config.lib.file.mkOutOfStoreSymlink path;
@@ -10,10 +11,21 @@ let
 in
 
 {
+  imports = [
+    inputs.dankMaterialShell.homeModules.dankMaterialShell.default
+  ];
+
+
+  # basic settings
   home.username = "mega_wu";
   home.homeDirectory = "/home/mega_wu";
-  programs.git.enable = true;
   home.stateVersion = "25.05";
+
+  # enabling
+  programs.dankMaterialShell.enable = true;
+  programs.git.enable = true;
+  
+
   programs.bash = {
     enable = true;
     shellAliases = {
