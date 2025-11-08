@@ -85,6 +85,9 @@
 
     # for hyprland
     # waybar  hyprpaper  kitty
+
+    # for niri
+    fuzzel
  ];
 
   fonts.packages = with pkgs; [
