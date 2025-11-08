@@ -85,6 +85,7 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.mega_wu = {
     isNormalUser = true;
+    shell = pkgs.bashInteractive;
     description = "mega_wu";
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
