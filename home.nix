@@ -44,7 +44,7 @@ in
     shellAliases = {
       btw = ''echo "check check"'';
       nrsf = "sudo nixos-rebuild switch --flake .#nixos";
-    };
+     };
     # profileExtra = ''
     #     if [ -z "$WAYLAND_DISPLAY" ] && [ "$XDG_VTNR" = 1 ]; then
     #       exec uwsm start -S hyprland-uwsm.desktop
@@ -52,16 +52,34 @@ in
     # '';
   };
 
-  programs.vivaldi.enable = true;
-  home.sessionVariables = {
-    # this is for vivaldi to launch correctly
-    CHROMIUM_FLAGS = "--ozone-platform=wayland --enable-features=UseOzonePlatform,WaylandWindowDecorations";
+  programs.vivaldi =  {
+    enable = true;
+    commandLineArgs = ["--ozone-platform=wayland"];
   };
+ 
+  # home.sessionVariables = {
+  #   # this is for vivaldi to launch correctly
+  #   CHROMIUM_FLAGS = "--ozone-platform=wayland --enable-features=UseOzonePlatform,WaylandWindowDecorations";
+  # };
 
 
 
   home.packages = with pkgs; [
     neofetch
+    
+    # vivaldi stuff
+    # (vivaldi.override {
+    #   proprietaryCodecs = true;
+    #   enableWidevine = true;
+    # }).overrideAttrs (oldAttrs: {
+    #   commandLineArgs = [
+    #     "--ozone-platform=wayland"
+    #     # Optional, might help depending on your setup
+    #     "--enable-features=UseOzonePlatform" 
+    #     "--ozone-platform-hint=auto"
+    #   ];
+    # })
+    kdePackages.qtwayland
 
     # this is for running ns for nix-search TV
     (pkgs.writeShellApplication {

@@ -41,6 +41,23 @@
     pulse.enable = true;
  };
 
+
+ security.sudo = {
+   enable = true;
+   extraRules = [
+       {
+          users = [ "mega_wu" ];
+          commands = [
+            {
+              command = "/run/current-system/sw/bin/nixos-rebuild";
+              # command = "sudo nixos-rebuild switch --flake .#nixos";
+              options = [ "NOPASSWD" ];
+            }
+          ];
+       }  
+   ];
+ };
+
  users.users.mega_wu = {
     isNormalUser = true;
     shell = pkgs.bashInteractive;
@@ -69,6 +86,9 @@
   #   xwayland.enable = true;
   #   withUWSM = true;
   # };
+
+  # Just for vivaldi to run
+  # programs.xwayland.enable = true;
 
   # Install firefox.
   programs.firefox.enable = true;
