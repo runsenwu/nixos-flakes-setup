@@ -72,7 +72,7 @@
 
     # for hyprland
     waybar  hyprpaper  kitty
-  ];
+ ];
 
   fonts.packages = with pkgs; [
     nerd-fonts.jetbrains-mono
