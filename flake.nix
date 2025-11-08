@@ -19,7 +19,7 @@
           home-manager = {
             useGlobalPkgs = true;
             useUserPackages = true;
-            users.mega_wu = import /home/mega_wu/nixos-version-control/home.nix;
+            users.mega_wu = import ./home.nix;
             backupFileExtension = "original";
           };
         }
