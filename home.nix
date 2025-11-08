@@ -28,7 +28,8 @@ in
   # enabling
   programs.dankMaterialShell = {
      enable = true;
-     #quickshell.package = pkgs.quickshell;
+     quickshell.package =
+       inputs.nixpkgs-unstable.legacyPackages.${pkgs.system}.quickshell;
      #niri = {
      #  enableKeybinds = true;
      #  enableSpawn = true;
