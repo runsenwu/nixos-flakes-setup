@@ -31,7 +31,7 @@
     };
   };
   
-  outputs = { self, nixpkgs, home-manager, ... }: {
+  outputs = { self, nixpkgs, home-manager, ... }@inputs: {
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
@@ -43,6 +43,7 @@
             useUserPackages = true;
             users.mega_wu = import ./home.nix;
             backupFileExtension = "original";
+            extraSpecialArgs = { inherit inputs; };
           };
         }
       ]; 

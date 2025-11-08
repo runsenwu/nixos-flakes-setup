@@ -12,7 +12,7 @@ in
 
 {
   imports = [
-    inputs.dankMaterialShell.homeModules.dankMaterialShell.default
+    # inputs.dankMaterialShell.homeModules.dankMaterialShell.default
   ];
 
 
@@ -22,9 +22,13 @@ in
   home.stateVersion = "25.05";
 
   # enabling
-  programs.dankMaterialShell.enable = true;
-  programs.git.enable = true;
+  # programs.dankMaterialShell = {
+  #   enable = true;
+  #   #quickshell.package = pkgs.quickshell;
+  # };
   
+  programs.git.enable = true;
+  # programs.quickshell.enable = true;  
 
   programs.bash = {
     enable = true;
@@ -41,6 +45,8 @@ in
 
   home.packages = with pkgs; [
     neofetch
+
+    # this is for running ns for nix-search TV
     (pkgs.writeShellApplication {
       name = "ns";
       runtimeInputs = with pkgs; [
