@@ -55,7 +55,7 @@
     enable = true;
     xwayland.enable = true;
     withUWSM = true;
-  }
+  };
 
   # Install firefox.
   programs.firefox.enable = true;

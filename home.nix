@@ -3,7 +3,9 @@ let
   dotfiles = "${config.home.homeDirectory}/nixos-version-control/config";
   create_symlink = path: config.lib.file.mkOutOfStoreSymlink path;
   configs = {
-    helix = "helix";
+   # helix = "helix";
+    hypr = "hypr";
+    waybar = "waybar";
   };
 in
 
@@ -34,4 +36,6 @@ in
   #   recursive = true;
   # })
   # configs;
+  home.file.".config/hypr".source = ./config/hypr;
+  home.file.".config/waybar".source = ./config/waybar;
 }
