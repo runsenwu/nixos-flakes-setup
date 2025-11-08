@@ -13,6 +13,10 @@ in
 {
   imports = [
     inputs.dankMaterialShell.homeModules.dankMaterialShell.default
+
+    # maybe in the future when the next version becomes stable instead
+    #inputs.niri.homeModules.niri
+    #inputs.dankMaterialShell.homeModules.dankMaterialShell.niri
   ];
 
 
@@ -22,10 +26,14 @@ in
   home.stateVersion = "25.05";
 
   # enabling
-  # programs.dankMaterialShell = {
-  #   enable = true;
-  #   #quickshell.package = pkgs.quickshell;
-  # };
+  programs.dankMaterialShell = {
+     enable = true;
+     #quickshell.package = pkgs.quickshell;
+     #niri = {
+     #  enableKeybinds = true;
+     #  enableSpawn = true;
+     #};
+  };
   
   programs.git.enable = true;
   # programs.quickshell.enable = true;  
