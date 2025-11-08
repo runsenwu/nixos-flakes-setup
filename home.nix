@@ -17,6 +17,11 @@ in
     shellAliases = {
       btw = ''echo "check check"'';
     };
+    profileExtra = ''
+        if [ -z "$WAYLAND_DISPLAY" ] && [ "$XDG_VTNR" = 1 ]; then
+          exec uwsm start -S hyprland-uwsm.desktop
+        fi
+    '';
   };
 
   home.packages = with pkgs; [
