@@ -18,12 +18,13 @@ in
     enable = true;
     shellAliases = {
       btw = ''echo "check check"'';
+      nrsf = "sudo nixos-rebuild switch --flake .#nixos";
     };
-    profileExtra = ''
-        if [ -z "$WAYLAND_DISPLAY" ] && [ "$XDG_VTNR" = 1 ]; then
-          exec uwsm start -S hyprland-uwsm.desktop
-        fi
-    '';
+    # profileExtra = ''
+    #     if [ -z "$WAYLAND_DISPLAY" ] && [ "$XDG_VTNR" = 1 ]; then
+    #       exec uwsm start -S hyprland-uwsm.desktop
+    #     fi
+    # '';
   };
 
   home.packages = with pkgs; [
@@ -44,6 +45,6 @@ in
   #   recursive = true;
   # })
   # configs;
-  home.file.".config/hypr".source = ./config/hypr;
-  home.file.".config/waybar".source = ./config/waybar;
+  # home.file.".config/hypr".source = ./config/hypr;
+  # home.file.".config/waybar".source = ./config/waybar;
 }

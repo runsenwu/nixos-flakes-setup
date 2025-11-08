@@ -51,11 +51,24 @@
     ];
   };
 
-  programs.hyprland = {
+  programs.niri = {
     enable = true;
-    xwayland.enable = true;
-    withUWSM = true;
   };
+
+  services.greetd = {
+    enable = true;
+    settings.default_session = {
+      command = "niri";
+      user = "mega_wu";
+    };
+  };
+
+
+  # programs.hyprland = {
+  #   enable = true;
+  #   xwayland.enable = true;
+  #   withUWSM = true;
+  # };
 
   # Install firefox.
   programs.firefox.enable = true;
@@ -71,7 +84,7 @@
     tealdeer  xclip  bat  neofetch
 
     # for hyprland
-    waybar  hyprpaper  kitty
+    # waybar  hyprpaper  kitty
  ];
 
   fonts.packages = with pkgs; [
