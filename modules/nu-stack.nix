@@ -2,7 +2,8 @@
 
 {
   imports = [
-    ./starship.nix
+    # ./starship.nix
+    ./starship_full.nix
   ];
   # Handy CLI set (trim to taste)
   home.packages = with pkgs; [
