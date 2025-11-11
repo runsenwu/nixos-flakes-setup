@@ -49,7 +49,7 @@
               users.mega_wu = {
                 imports = [
                   ./home.nix
-                  ./modules/nu-stack.nix
+                  #./modules/nu-stack.nix
                 ];
 
               };

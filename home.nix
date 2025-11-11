@@ -19,7 +19,7 @@ in
 {
   imports = [
     inputs.dankMaterialShell.homeModules.dankMaterialShell.default
-
+    ./modules/nu-stack.nix
     # maybe in the future when the next version becomes stable instead
     #inputs.niri.homeModules.niri
     #inputs.dankMaterialShell.homeModules.dankMaterialShell.niri
@@ -100,8 +100,11 @@ in
     # nav + zoxide
     z = "z";
     zz = "z -r";
-    #".." = "cd ..";
-    #"..." = "cd ../..";
+    ".." = "cd ..";
+    "..." = "cd ../..";
+
+    # yazi
+    yz = "yazi";
 
     # archives
     untar = "tar -xvf";

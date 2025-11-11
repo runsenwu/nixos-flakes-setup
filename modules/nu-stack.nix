@@ -1,6 +1,9 @@
 { pkgs, lib, ... }:
 
 {
+  imports = [
+    ./starship.nix
+  ];
   # Handy CLI set (trim to taste)
   home.packages = with pkgs; [
     lsd
@@ -8,7 +11,6 @@
     ripgrep
     fd
     fzf
-    yazi
     tree
     unzip
     zip
@@ -46,70 +48,32 @@
 
       def --env mkcd [path] { mkdir $path; cd $path }
     '';
-
-    # shellAliases = {
-    #   # modern replacements
-    #   ls = "lsd -lh";
-    #   la = "lsd -lha";
-    #   ll = "lsd -lh";
-    #   cat = "bat";
-    #   find = "fd";
-    #   grep = "rg";
-
-    #   # git
-    #   g = "git";
-    #   ga = "git add";
-    #   gc = "git commit";
-    #   gca = "git commit --amend";
-    #   gpsh = "git push";
-    #   gpul = "git pull";
-    #   gst = "git status";
-    #   gco = "git checkout";
-    #   gb = "git branch";
-    #   gbb = "git branch -b";
-    #   gd = "git diff";
-    #   glg = "git log --graph --decorate --oneline --all";
-
-    #   # nav + zoxide
-    #   z = "z";
-    #   zz = "z -r";
-
-    #   # yazi
-    #   yz = "yazi";
-
-    #   # archives
-    #   untar = "tar -xvf";
-    #   targz = "tar -czvf";
-
-    #   # misc
-    #   path = "echo $env.PATH | tr ':' '\\n'";
-    # };
   };
 
   # Prompt, completions, per-dir env, jump-to-dir
-  programs.starship = {
-    enable = true;
-    enableNushellIntegration = true;
-    settings = {
-      add_newline = true;
-      character = {
-        success_symbol = "➜";
-        error_symbol = "✗";
-      };
-      git_status = {
-        conflicted = "=";
-        ahead = "⇡";
-        behind = "⇣";
-        diverged = "⇕";
-        untracked = "?";
-        stashed = "$";
-        modified = "!";
-        staged = "+";
-        renamed = "»";
-        deleted = "✘";
-      };
-    };
-  };
+  # programs.starship = {
+  #   enable = true;
+  #   enableNushellIntegration = true;
+  #   settings = {
+  #     add_newline = true;
+  #     character = {
+  #       success_symbol = "➜";
+  #       error_symbol = "✗";
+  #     };
+  #     git_status = {
+  #       conflicted = "=";
+  #       ahead = "⇡";
+  #       behind = "⇣";
+  #       diverged = "⇕";
+  #       untracked = "?";
+  #       stashed = "$";
+  #       modified = "!";
+  #       staged = "+";
+  #       renamed = "»";
+  #       deleted = "✘";
+  #     };
+  #   };
+  # };
 
   programs.carapace = {
     enable = true;
@@ -126,4 +90,31 @@
     enable = true;
     enableNushellIntegration = true;
   };
+
+  programs.yazi.enable = true;
+
+  home.file."/.config/yazi/yazi.toml".text = ''
+    [opener]
+    edit = [
+      { run = "hx \"$@\"", block = true, desc = "Edit in Helix" }
+    ]
+    open = [
+      { run = "hx \"$@\"", block = true, desc = "Open in Helix" }
+    ]
+
+    # NEW: prepend_rules must be an array of tables ([[ ... ]])
+    [[open.prepend_rules]]
+    name = "*.nix"
+    use  = ["edit"]
+
+    # NEW: [manager] was renamed to [mgr]
+    [mgr]
+    show_hidden = true
+  '';
+
+  # keymap.toml: layer renamed from [manager] -> [mgr]
+  home.file."/.config/yazi/keymap.toml".text = ''
+    [mgr]
+    "E" = "open --with edit"   # Shift+E to open with the "edit" opener (Helix)
+  '';
 }
