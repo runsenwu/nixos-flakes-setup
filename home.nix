@@ -1,10 +1,16 @@
-{ config, pkgs, inputs, ... }:
+{
+  config,
+  pkgs,
+  inputs,
+  lib,
+  ...
+}:
 
 let
   dotfiles = "${config.home.homeDirectory}/nixos-version-control/config";
   create_symlink = path: config.lib.file.mkOutOfStoreSymlink path;
   configs = {
-   # helix = "helix";
+    # helix = "helix";
     hypr = "hypr";
     waybar = "waybar";
   };
@@ -19,7 +25,6 @@ in
     #inputs.dankMaterialShell.homeModules.dankMaterialShell.niri
   ];
 
-
   # basic settings
   home.username = "mega_wu";
   home.homeDirectory = "/home/mega_wu";
@@ -27,24 +32,41 @@ in
 
   # enabling
   programs.dankMaterialShell = {
-     enable = true;
-     quickshell.package =
-       inputs.nixpkgs-unstable.legacyPackages.${pkgs.system}.quickshell;
-     #niri = {
-     #  enableKeybinds = true;
-     #  enableSpawn = true;
-     #};
+    enable = true;
+    quickshell.package = inputs.nixpkgs-unstable.legacyPackages.${pkgs.system}.quickshell;
+    #niri = {
+    #  enableKeybinds = true;
+    #  enableSpawn = true;
+    #};
   };
-  
+
   programs.git.enable = true;
-  # programs.quickshell.enable = true;  
+  # programs.quickshell.enable = true;
+
+  programs.zed-editor = {
+    enable = true;
+    extensions = [
+      "nix"
+      "toml"
+      "rust"
+    ];
+    userSettings = {
+      theme = {
+        mode = "system";
+        dark = "One Dark";
+        light = "One Light";
+      };
+      hour_format = "hour24";
+      vim_mode = true;
+    };
+  };
 
   programs.bash = {
     enable = true;
     shellAliases = {
       btw = ''echo "check check"'';
       nrsf = "sudo nixos-rebuild switch --flake .#nixos";
-     };
+    };
     # profileExtra = ''
     #     if [ -z "$WAYLAND_DISPLAY" ] && [ "$XDG_VTNR" = 1 ]; then
     #       exec uwsm start -S hyprland-uwsm.desktop
@@ -52,33 +74,118 @@ in
     # '';
   };
 
-  programs.vivaldi =  {
-    enable = true;
-    commandLineArgs = ["--ozone-platform=wayland"];
+  home.shellAliases = {
+    # modern replacements
+    ls = "lsd -lh";
+    la = "lsd -lha";
+    ll = "lsd -lh";
+    cat = "bat";
+    find = "fd";
+    grep = "rg";
+
+    # git
+    g = "git";
+    ga = "git add";
+    gc = "git commit";
+    gca = "git commit --amend";
+    gpsh = "git push";
+    gpul = "git pull";
+    gst = "git status";
+    gco = "git checkout";
+    gb = "git branch";
+    gbb = "git branch -b";
+    gd = "git diff";
+    glg = "git log --graph --decorate --oneline --all";
+
+    # nav + zoxide
+    z = "z";
+    zz = "z -r";
+    #".." = "cd ..";
+    #"..." = "cd ../..";
+
+    # archives
+    untar = "tar -xvf";
+    targz = "tar -czvf";
+
+    # misc
+    # path = "echo $env.PATH | tr ':' '\\n'";
   };
- 
-  # home.sessionVariables = {
-  #   # this is for vivaldi to launch correctly
-  #   CHROMIUM_FLAGS = "--ozone-platform=wayland --enable-features=UseOzonePlatform,WaylandWindowDecorations";
+
+  programs.vivaldi = {
+    enable = true;
+    commandLineArgs = [ "--ozone-platform=wayland" ];
+  };
+
+  # programs.obsidian = {
+  #   enable = true;
+  #   commandLineArgs = ["--enable-features=UseOzonePlatform --ozone-platform=wayland"];
   # };
 
+  # nushell and starship config
+  # programs = {
+  # programs.nushell.enable = true;
+  #     # configFile.source = ./config/nushell/config.nu;
+  #     # configFile.source = ./config/nushell/config.nu;
+  #     #   shellAliases = {
+  #     #     vi = "hx";
+  #     #     vim = "hx";
+  #     #     nano = "hx";
+  #     #   };
+  #   };
 
+  #   carapace.enable = true;
+  #   carapace.enableNushellIntegration = true;
+
+  #   starship = {
+  #     enable = true;
+  #     settings = {
+  #       add_newline = true;
+  #       character = {
+  #         success_symbol = "[➜](bold green)";
+  #         error_symbol = "[➜](bold red)";
+  #       };
+  #     };
+  #   };
+  # };
+
+  # systemd.user.sessionVariables = {
+  #   # running for electron apps
+  #   NIXOS_OZONE_WL = "1";
+  #   ELECTRON_OZONE_PLATFORM_HINT = "auto";
+  # };
+
+  # systemd.user.startServices = "sd-switch";
+
+  programs.helix = {
+    enable = true;
+    settings = {
+      theme = "autumn_night_transparent";
+      editor.cursor-shape = {
+        normal = "bar";
+        insert = "bar";
+        select = "underline";
+      };
+    };
+    languages.language = [
+      {
+        name = "nix";
+        auto-format = true;
+        formatter.command = lib.getExe pkgs.nixfmt-rfc-style;
+
+      }
+    ];
+    themes = {
+      autumn_night_transparent = {
+        "inherits" = "autumn_night";
+        "ui.background" = { };
+      };
+    };
+  };
 
   home.packages = with pkgs; [
     neofetch
-    
-    # vivaldi stuff
-    # (vivaldi.override {
-    #   proprietaryCodecs = true;
-    #   enableWidevine = true;
-    # }).overrideAttrs (oldAttrs: {
-    #   commandLineArgs = [
-    #     "--ozone-platform=wayland"
-    #     # Optional, might help depending on your setup
-    #     "--enable-features=UseOzonePlatform" 
-    #     "--ozone-platform-hint=auto"
-    #   ];
-    # })
+
+    # this is for vivaldi
     kdePackages.qtwayland
 
     # this is for running ns for nix-search TV
@@ -100,5 +207,9 @@ in
   # configs;
   # home.file.".config/hypr".source = ./config/hypr;
   # home.file.".config/waybar".source = ./config/waybar;
-  home.file.".config/niri".source = ./config/niri; 
+  home.file.".config/niri".source = ./config/niri;
+  # home.file.".config/nushell" = {
+  #  source = ./config/nushell;
+  #  recursive = true;
+  #};
 }

@@ -4,13 +4,11 @@
     nixpkgs-unstable.url = "github:nixos/nixpkgs?ref=nixos-unstable";
     nixpkgs.url = "nixpkgs/nixos-25.05";
 
-
     # home manager
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
 
     # DMS Dank Material Shell
     dgop = {
@@ -30,23 +28,36 @@
       inputs.dms-cli.follows = "dms-cli";
     };
   };
-  
-  outputs = { self, nixpkgs, home-manager, ... }@inputs: {
-    nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      modules = [
-        ./configuration.nix
-        home-manager.nixosModules.home-manager
-        {
-          home-manager = {
-            useGlobalPkgs = true;
-            useUserPackages = true;
-            users.mega_wu = import ./home.nix;
-            backupFileExtension = "original";
-            extraSpecialArgs = { inherit inputs; };
-          };
-        }
-      ]; 
-    };   
-  };
+
+  outputs =
+    {
+      self,
+      nixpkgs,
+      home-manager,
+      ...
+    }@inputs:
+    {
+      nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          ./configuration.nix
+          home-manager.nixosModules.home-manager
+          {
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              users.mega_wu = {
+                imports = [
+                  ./home.nix
+                  ./modules/nu-stack.nix
+                ];
+
+              };
+              backupFileExtension = "original";
+              extraSpecialArgs = { inherit inputs; };
+            };
+          }
+        ];
+      };
+    };
 }

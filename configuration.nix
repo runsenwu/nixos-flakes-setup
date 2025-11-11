@@ -1,20 +1,32 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
-  imports =
-    [
-      ./hardware-configuration.nix
-    ];
+  imports = [
+    ./hardware-configuration.nix
+  ];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
   networking.hostName = "nixos"; # Define your hostname.
-  
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
-  
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
+
+  # electron app to make everything just work
+  environment.sessionVariables = {
+    NIXOS_OZONE_WL = "1";
+    ELECTRON_OZONE_PLATFORM_HINT = "auto";
+  };
+
   # Enable networking
   networking.networkmanager.enable = true;
 
@@ -23,14 +35,14 @@
 
   services.getty.autologinUser = "mega_wu";
 
-  services.xserver.videoDrivers = ["nvidia"];
+  services.xserver.videoDrivers = [ "nvidia" ];
   hardware.nvidia.modesetting.enable = true;
   hardware.nvidia.open = true;
   hardware.graphics.enable = true;
 
   # Enable bluetooh
   hardware.bluetooth.enable = true;
-  
+
   # Enable sound with pipewire.
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
@@ -39,30 +51,42 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
- };
+  };
 
+  security.sudo = {
+    enable = true;
+    extraRules = [
+      {
+        users = [ "mega_wu" ];
+        commands = [
+          {
+            command = "/run/current-system/sw/bin/nixos-rebuild";
+            # command = "sudo nixos-rebuild switch --flake .#nixos";
+            options = [ "NOPASSWD" ];
+          }
+        ];
+      }
+    ];
+  };
 
- security.sudo = {
-   enable = true;
-   extraRules = [
-       {
-          users = [ "mega_wu" ];
-          commands = [
-            {
-              command = "/run/current-system/sw/bin/nixos-rebuild";
-              # command = "sudo nixos-rebuild switch --flake .#nixos";
-              options = [ "NOPASSWD" ];
-            }
-          ];
-       }  
-   ];
- };
+  environment.shells = [
+    pkgs.nushell
+  ];
 
- users.users.mega_wu = {
+  # programs.bash.interactiveShellInit = ''
+  #  if ! [ "$TERM" = "dumb" ]; then
+  #      exec nu
+  #    fi
+  # '';
+
+  users.users.mega_wu = {
     isNormalUser = true;
-    shell = pkgs.bashInteractive;
+    # shell = pkgs.nushell;
     description = "mega_wu";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+    ];
     packages = with pkgs; [
       tree
     ];
@@ -79,7 +103,6 @@
       user = "mega_wu";
     };
   };
-
 
   # programs.hyprland = {
   #   enable = true;
@@ -98,23 +121,32 @@
 
   environment.systemPackages = with pkgs; [
     # essentials
-    helix  git  curl  rio
+    helix
+    git
+    curl
+    rio
 
     # command line tools
-    tealdeer  xclip  bat  neofetch
+    tealdeer
+    xclip
+    bat
+    neofetch
 
     # for hyprland
     # waybar  hyprpaper  kitty
 
     # for niri
     fuzzel
- ];
+
+    # other aps
+    obsidian
+  ];
 
   fonts.packages = with pkgs; [
     nerd-fonts.jetbrains-mono
   ];
-  
- # Before changing this value read the documentation for this option
+
+  # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "25.05"; # Did you read the comment?
 
