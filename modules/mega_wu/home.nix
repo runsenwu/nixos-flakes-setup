@@ -18,8 +18,8 @@ in
 {
   imports = [
     inputs.dankMaterialShell.homeModules.dankMaterialShell.default
-    ../essentials/shells/nushell/nu-stack.nix
-    ../essentials/rust/rust.nix
+    ../essentials/terminal/shells/nushell/nu-stack.nix
+    ../essentials/coding-languages/rust/rust.nix
     # maybe in the future when the next version becomes stable instead
     #inputs.niri.homeModules.niri
     #inputs.dankMaterialShell.homeModules.dankMaterialShell.niri
@@ -177,5 +177,5 @@ in
   # configs;
   # home.file.".config/hypr".source = ./config/hypr;
   # home.file.".config/waybar".source = ./config/waybar;
-  home.file.".config/niri".source = ../essentials/gui/niri;
+  home.file.".config/niri".source = ../essentials/display/niri;
 }
