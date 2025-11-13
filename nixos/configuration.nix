@@ -46,6 +46,7 @@
   # Enable sound with pipewire.
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
+
   services.pipewire = {
     enable = true;
     alsa.enable = true;
@@ -73,12 +74,6 @@
     pkgs.nushell
   ];
 
-  # programs.bash.interactiveShellInit = ''
-  #  if ! [ "$TERM" = "dumb" ]; then
-  #      exec nu
-  #    fi
-  # '';
-
   users.users.mega_wu = {
     isNormalUser = true;
     # shell = pkgs.nushell;
@@ -104,15 +99,6 @@
     };
   };
 
-  # programs.hyprland = {
-  #   enable = true;
-  #   xwayland.enable = true;
-  #   withUWSM = true;
-  # };
-
-  # Just for vivaldi to run
-  # programs.xwayland.enable = true;
-
   # Install firefox.
   programs.firefox.enable = true;
 
@@ -132,14 +118,11 @@
     bat
     neofetch
 
-    # for hyprland
-    # waybar  hyprpaper  kitty
-
     # for niri
     fuzzel
 
-    # other aps
-    obsidian
+    # Language supports
+    omnisharp-roslyn
   ];
 
   fonts.packages = with pkgs; [
@@ -149,5 +132,4 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "25.05"; # Did you read the comment?
-
 }

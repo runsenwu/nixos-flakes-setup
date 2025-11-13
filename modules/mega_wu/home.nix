@@ -7,10 +7,9 @@
 }:
 
 let
-  dotfiles = "${config.home.homeDirectory}/nixos-version-control/config";
+  dotfiles = "${config.home.homeDirectory}/nixos-version-control/nix-config";
   create_symlink = path: config.lib.file.mkOutOfStoreSymlink path;
   configs = {
-    # helix = "helix";
     hypr = "hypr";
     waybar = "waybar";
   };
@@ -19,7 +18,8 @@ in
 {
   imports = [
     inputs.dankMaterialShell.homeModules.dankMaterialShell.default
-    ./modules/nu-stack.nix
+    ../essentials/shells/nushell/nu-stack.nix
+    ../essentials/rust/rust.nix
     # maybe in the future when the next version becomes stable instead
     #inputs.niri.homeModules.niri
     #inputs.dankMaterialShell.homeModules.dankMaterialShell.niri
@@ -52,12 +52,11 @@ in
     ];
     userSettings = {
       theme = {
-        mode = "system";
-        dark = "One Dark";
-        light = "One Light";
+        mode = "dark";
+        dark = "Gruvbox Dark Hard";
       };
       hour_format = "hour24";
-      vim_mode = true;
+      vim_mode = false;
     };
   };
 
@@ -65,20 +64,13 @@ in
     enable = true;
     shellAliases = {
       btw = ''echo "check check"'';
-      nrsf = "sudo nixos-rebuild switch --flake .#nixos";
     };
-    # profileExtra = ''
-    #     if [ -z "$WAYLAND_DISPLAY" ] && [ "$XDG_VTNR" = 1 ]; then
-    #       exec uwsm start -S hyprland-uwsm.desktop
-    #     fi
-    # '';
   };
 
   home.shellAliases = {
     # modern replacements
-    ls = "lsd -lh";
-    la = "lsd -lha";
-    ll = "lsd -lh";
+    la = "ls -a";
+    ll = "ls -l";
     cat = "bat";
     find = "fd";
     grep = "rg";
@@ -112,52 +104,15 @@ in
 
     # misc
     # path = "echo $env.PATH | tr ':' '\\n'";
+    nrsf = "sudo nixos-rebuild switch --flake .#nixos";
+
+    zd = "zeditor";
   };
 
   programs.vivaldi = {
     enable = true;
     commandLineArgs = [ "--ozone-platform=wayland" ];
   };
-
-  # programs.obsidian = {
-  #   enable = true;
-  #   commandLineArgs = ["--enable-features=UseOzonePlatform --ozone-platform=wayland"];
-  # };
-
-  # nushell and starship config
-  # programs = {
-  # programs.nushell.enable = true;
-  #     # configFile.source = ./config/nushell/config.nu;
-  #     # configFile.source = ./config/nushell/config.nu;
-  #     #   shellAliases = {
-  #     #     vi = "hx";
-  #     #     vim = "hx";
-  #     #     nano = "hx";
-  #     #   };
-  #   };
-
-  #   carapace.enable = true;
-  #   carapace.enableNushellIntegration = true;
-
-  #   starship = {
-  #     enable = true;
-  #     settings = {
-  #       add_newline = true;
-  #       character = {
-  #         success_symbol = "[➜](bold green)";
-  #         error_symbol = "[➜](bold red)";
-  #       };
-  #     };
-  #   };
-  # };
-
-  # systemd.user.sessionVariables = {
-  #   # running for electron apps
-  #   NIXOS_OZONE_WL = "1";
-  #   ELECTRON_OZONE_PLATFORM_HINT = "auto";
-  # };
-
-  # systemd.user.startServices = "sd-switch";
 
   programs.helix = {
     enable = true;
@@ -174,7 +129,16 @@ in
         name = "nix";
         auto-format = true;
         formatter.command = lib.getExe pkgs.nixfmt-rfc-style;
-
+      }
+      {
+        name = "rust";
+        auto-format = true;
+        formatter.command = lib.getExe pkgs.rust-analyzer;
+      }
+      {
+        name = "c-sharp";
+        auto-format = true;
+        formatter.command = lib.getExe pkgs.omnisharp-roslyn;
       }
     ];
     themes = {
@@ -190,6 +154,9 @@ in
 
     # this is for vivaldi
     kdePackages.qtwayland
+
+    # other apps
+    obsidian
 
     # this is for running ns for nix-search TV
     (pkgs.writeShellApplication {
@@ -210,9 +177,5 @@ in
   # configs;
   # home.file.".config/hypr".source = ./config/hypr;
   # home.file.".config/waybar".source = ./config/waybar;
-  home.file.".config/niri".source = ./config/niri;
-  # home.file.".config/nushell" = {
-  #  source = ./config/nushell;
-  #  recursive = true;
-  #};
+  home.file.".config/niri".source = ../essentials/gui/niri;
 }

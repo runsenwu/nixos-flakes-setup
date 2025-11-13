@@ -1,12 +1,12 @@
 {
-  description = "A very basic flake";
+  description = "My Flake";
   inputs = {
     nixpkgs-unstable.url = "github:nixos/nixpkgs?ref=nixos-unstable";
     nixpkgs.url = "nixpkgs/nixos-25.05";
 
     # home manager
     home-manager = {
-      url = "github:nix-community/home-manager";
+      url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -40,7 +40,7 @@
       nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
-          ./configuration.nix
+          ./nixos/configuration.nix
           home-manager.nixosModules.home-manager
           {
             home-manager = {
@@ -48,7 +48,7 @@
               useUserPackages = true;
               users.mega_wu = {
                 imports = [
-                  ./home.nix
+                  ./modules/mega_wu/home.nix
                   #./modules/nu-stack.nix
                 ];
 

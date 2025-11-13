@@ -6,8 +6,8 @@
 
     settings = {
       # ---------- Performance ----------
-      command_timeout = 800;
-      scan_timeout = 50;
+      command_timeout = 5000;
+      scan_timeout = 1000;
       add_newline = true;
 
       # ---------- Layout ----------

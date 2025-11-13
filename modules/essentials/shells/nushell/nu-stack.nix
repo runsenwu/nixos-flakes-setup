@@ -2,12 +2,12 @@
 
 {
   imports = [
-    # ./starship.nix
-    ./starship_full.nix
+    ./starship.nix
+    # ./starship_full.nix
   ];
   # Handy CLI set (trim to taste)
   home.packages = with pkgs; [
-    lsd
+    # lsd
     bat
     ripgrep
     fd
@@ -43,7 +43,7 @@
           quick: true
           partial: true
           algorithm: "fuzzy"
-          external: { enable: true, max_results: 200, completer: $carapace_completer }
+          external: { enable: true, max_results: 20, completer: $carapace_completer }
         }
       })
 
