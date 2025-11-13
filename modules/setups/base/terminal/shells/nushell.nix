@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ./starship.nix
+    ../tools/starship.nix
     # ./starship_full.nix
   ];
   # Handy CLI set (trim to taste)

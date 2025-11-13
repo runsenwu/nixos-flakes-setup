@@ -35,8 +35,7 @@
       nixpkgs,
       home-manager,
       ...
-    }@inputs:
-    {
+    }@inputs:{
       nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
@@ -48,13 +47,13 @@
               useUserPackages = true;
               users.mega_wu = {
                 imports = [
-                  ./modules/mega_wu/home.nix
-                  #./modules/nu-stack.nix
+                  ./modules/home.nix
                 ];
-
               };
               backupFileExtension = "original";
-              extraSpecialArgs = { inherit inputs; };
+              extraSpecialArgs = {
+                inherit inputs;
+              };
             };
           }
         ];

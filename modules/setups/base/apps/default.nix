@@ -1,0 +1,5 @@
+{
+  imports = [
+    ./vivaldi/vivaldi.nix
+  ];
+}

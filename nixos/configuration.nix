@@ -8,6 +8,7 @@
 {
   imports = [
     ./hardware-configuration.nix
+    # ../modules/essentials/default.nix
   ];
 
   # Bootloader.
