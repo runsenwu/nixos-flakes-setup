@@ -8,10 +8,8 @@
 {
   imports = [
     ./hardware-configuration.nix
-    # ../modules/essentials/default.nix
   ];
 
-  # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
@@ -22,7 +20,7 @@
     "flakes"
   ];
 
-  # electron app to make everything just work
+  # electron app
   environment.sessionVariables = {
     NIXOS_OZONE_WL = "1";
     ELECTRON_OZONE_PLATFORM_HINT = "auto";
@@ -63,7 +61,6 @@
         commands = [
           {
             command = "/run/current-system/sw/bin/nixos-rebuild";
-            # command = "sudo nixos-rebuild switch --flake .#nixos";
             options = [ "NOPASSWD" ];
           }
         ];
@@ -77,14 +74,10 @@
 
   users.users.mega_wu = {
     isNormalUser = true;
-    # shell = pkgs.nushell;
     description = "mega_wu";
     extraGroups = [
       "networkmanager"
       "wheel"
-    ];
-    packages = with pkgs; [
-      tree
     ];
   };
 
@@ -99,9 +92,6 @@
       user = "mega_wu";
     };
   };
-
-  # Install firefox.
-  programs.firefox.enable = true;
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
@@ -121,9 +111,13 @@
 
     # for niri
     fuzzel
+    xwayland-satellite
 
     # Language supports
     omnisharp-roslyn
+
+    # test
+    discord
   ];
 
   fonts.packages = with pkgs; [
