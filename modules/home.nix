@@ -9,6 +9,7 @@
   imports = [
     inputs.dankMaterialShell.homeModules.dankMaterialShell.default
     ./setups/default.nix
+
     # maybe in the future when the next version becomes stable instead
     #inputs.niri.homeModules.niri
     #inputs.dankMaterialShell.homeModules.dankMaterialShell.niri
@@ -30,7 +31,6 @@
   };
 
   programs.git.enable = true;
-  # programs.quickshell.enable = true;
 
   home.packages = with pkgs; [
     neofetch
@@ -40,16 +40,6 @@
 
     # other apps
     obsidian
-
-    # this is for running ns for nix-search TV
-    (pkgs.writeShellApplication {
-      name = "ns";
-      runtimeInputs = with pkgs; [
-        fzf
-        nix-search-tv
-      ];
-      text = builtins.readFile "${pkgs.nix-search-tv.src}/nixpkgs.sh";
-    })
   ];
 
   # This is for other things

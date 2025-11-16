@@ -4,5 +4,6 @@
     ./base/terminal
     ./base/coding-languages
     ./base/apps
+    ./gaming
   ];
 }

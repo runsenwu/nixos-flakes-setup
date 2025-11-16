@@ -35,22 +35,50 @@
   services.getty.autologinUser = "mega_wu";
 
   services.xserver.videoDrivers = [ "nvidia" ];
-  hardware.nvidia.modesetting.enable = true;
-  hardware.nvidia.open = true;
+
+  services.xserver.enable = false;
+
+  hardware.nvidia = {
+    modesetting.enable = true;
+    powerManagement.enable = true;
+    powerManagement.finegrained = false;
+    open = true;
+    package = config.boot.kernelPackages.nvidiaPackages.stable;
+  };
+
+  # hardware.opengl = {
+  #   enable = true;
+  #   driSupport = true;
+  #   driSupport32bit = true;
+  # };
+
   hardware.graphics.enable = true;
 
   # Enable bluetooh
   hardware.bluetooth.enable = true;
+  hardware.bluetooth.powerOnBoot = true;
+  hardware.bluetooth.settings = {
+    General = {
+      Experimental = true;
+      Enable = "Source,Sink,Media,Socket";
+    };
+  };
 
   # Enable sound with pipewire.
   services.pulseaudio.enable = false;
+  hardware.pulseaudio.enable = false;
+
+  hardware.alsa.enablePersistence = true; # optional but recommended
+
   security.rtkit.enable = true;
 
   services.pipewire = {
     enable = true;
     alsa.enable = true;
     alsa.support32Bit = true;
+    wireplumber.enable = true;
     pulse.enable = true;
+    jack.enable = false;
   };
 
   security.sudo = {
@@ -85,10 +113,32 @@
     enable = true;
   };
 
+  programs.steam = {
+    enable = true;
+    remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
+    dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
+    gamescopeSession.enable = true;
+  };
+
+  boot.kernelParams = [
+    "quiet"
+    "splash"
+    # "console=/dev/null"
+  ];
+  boot.plymouth.enable = true;
+
+  programs.gamescope = {
+    enable = true;
+    capSysNice = true;
+  };
+
+  programs.gamemode.enable = true;
+
   services.greetd = {
     enable = true;
     settings.default_session = {
       command = "niri";
+      # command = "${pkgs.gamescope}/bin/gamescope -W 5120 -H 2160 -f -e --xwayland-count 2 --hdr-enabled --hdr-itm-enabled -- steam -pipewire-dmabuf -gamepadui > /dev/null 2>&1";
       user = "mega_wu";
     };
   };
@@ -102,6 +152,8 @@
     git
     curl
     rio
+    pciutils # for lspci
+    usbutils # for lsusb
 
     # command line tools
     tealdeer
@@ -118,6 +170,8 @@
 
     # test
     discord
+
+    pulseaudio
   ];
 
   fonts.packages = with pkgs; [
